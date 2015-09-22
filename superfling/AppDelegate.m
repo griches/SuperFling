@@ -14,7 +14,7 @@
 
 @implementation AppDelegate
 
-
+#pragma mark - Boilerplate -
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     return YES;
@@ -44,8 +44,7 @@
     [self saveContext];
 }
 
-#pragma mark - Core Data stack
-
+#pragma mark - Core Data stack -
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -87,12 +86,13 @@
         // Replace this with code to handle the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        
+        // For the purposes of this demo I am leaving abort in as there will be migration or other issues. In a real world project this should be handled bettter.
         abort();
     }
     
     return _persistentStoreCoordinator;
 }
-
 
 - (NSManagedObjectContext *)managedObjectContext {
     // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.)
@@ -110,7 +110,6 @@
 }
 
 #pragma mark - Core Data Saving support
-
 - (void)saveContext {
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
