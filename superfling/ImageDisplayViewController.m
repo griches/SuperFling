@@ -9,6 +9,7 @@
 #import "ImageDisplayViewController.h"
 #import "SuperFlingTableViewCell.h"
 #import "Reachability.h"
+#import "UIImage+Resize.h"
 
 #define imagePath @"http://challenge.superfling.com/photos/"
 #define dataPath @"http://challenge.superfling.com"
@@ -137,11 +138,16 @@
                                                            
                                                            UIImage *downloadedImage = [UIImage imageWithData:imageData];
                                                            
-                                                           // Save the file to disk
-                                                           // TODO: Resize the image to device width and height to width / ratio
+                                                           CGSize resizedSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.width / 1.6);
+                                                           UIImage *resizedImage = [UIImage imageWithImage:downloadedImage scaledToSize:resizedSize];
+                                                           
+                                                           // Save the resized file to disk
                                                            NSString *imageName = [NSString stringWithFormat:@"%ld", pathID];
                                                            NSString *pathToImage = [self.libraryPath stringByAppendingPathComponent:imageName];
-                                                           [imageData writeToFile:pathToImage atomically:YES];
+                                                           
+                                                           // Get the resized image data
+                                                           NSData *resizedImageData = UIImageJPEGRepresentation(resizedImage, 0.5f);
+                                                           [resizedImageData writeToFile:pathToImage atomically:YES];
                                                            
                                                            // Look at using NSOperationQueue for threading. GCD works with the example given but wouldn't be good
                                                            // with the log out issues the team mentioned
@@ -149,7 +155,7 @@
                                                                
                                                                // Is the cell still the original cell or has it been reused?
                                                                if (cell.pathID == pathID) {
-                                                                   cell.cellImageView.image = downloadedImage;
+                                                                   cell.cellImageView.image = resizedImage;
                                                                }
                                                            });
                                                        } else {

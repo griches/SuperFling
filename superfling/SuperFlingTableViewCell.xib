@@ -14,14 +14,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="tSb-O2-ahg">
-                        <rect key="frame" x="150" y="90" width="20" height="20"/>
+                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="tSb-O2-ahg">
+                        <rect key="frame" x="141" y="81" width="37" height="37"/>
                     </activityIndicatorView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZFS-dn-R3j">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZFS-dn-R3j">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ca0-yF-c2n">
-                        <rect key="frame" x="10" y="10" width="300" height="21"/>
+                        <rect key="frame" x="10" y="10" width="300" height="12.5"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -29,6 +29,7 @@
                         <size key="shadowOffset" width="1" height="1"/>
                     </label>
                 </subviews>
+                <color key="backgroundColor" red="0.1176470588" green="0.13725490200000001" blue="0.1529411765" alpha="1" colorSpace="calibratedRGB"/>
                 <constraints>
                     <constraint firstItem="ZFS-dn-R3j" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="9ze-Sw-xX6"/>
                     <constraint firstItem="ZFS-dn-R3j" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="KvS-dL-Je9"/>
