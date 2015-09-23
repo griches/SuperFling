@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Gary Riches. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "ImageDisplayViewController.h"
 
-@interface ViewController ()
+@interface ImageDisplayViewController ()
 
 @end
 
-@implementation ViewController
+@implementation ImageDisplayViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
