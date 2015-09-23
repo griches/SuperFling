@@ -67,7 +67,6 @@
                                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                                                        
                                                        if (error) {
-                                                           
                                                            NSLog(@"%@", [error localizedDescription]);
                                                            
                                                            [self showErrorAlert];
@@ -116,12 +115,15 @@
     [alert show];
 }
 
-#pragma mark - Boilerplate -
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    
-    self.hostReachability = [Reachability reachabilityWithHostName:dataPath];
+#pragma mark - Reachability methods -
+- (void)reachabilityChanged:(NSNotification *)note
+{
+    Reachability *curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+    [self downloadAndParseListOfFlings];
+}
+
+- (void)checkReachabilityAndDownloadIfRequired {
     
     // Fetch the list of flings if we have an internet connection, else display a message if no content or show old content
     NetworkStatus netStatus = [self.hostReachability currentReachabilityStatus];
@@ -131,7 +133,7 @@
         case NotReachable:        {
             
             // Do we have cached data?
-
+            
             break;
         }
             
@@ -139,14 +141,23 @@
         case ReachableViaWiFi:        {
             
             // If no data then download new data. Assuming the data isn;t changing for the purpose of the demo as I see no timestamps
-
+            [self downloadAndParseListOfFlings];
+            
             break;
         }
     }
-    
+}
 
+#pragma mark - Boilerplate -
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
     
-    [self downloadAndParseListOfFlings];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    self.hostReachability = [Reachability reachabilityWithHostName:dataPath];
+    [self.hostReachability startNotifier];
+    
+    [self checkReachabilityAndDownloadIfRequired];
 }
 
 - (void)didReceiveMemoryWarning {
