@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -13,13 +14,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="tSb-O2-ahg">
+                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="tSb-O2-ahg">
                         <rect key="frame" x="150" y="90" width="20" height="20"/>
                     </activityIndicatorView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZFS-dn-R3j">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="199.5"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZFS-dn-R3j">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ca0-yF-c2n">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ca0-yF-c2n">
                         <rect key="frame" x="10" y="10" width="300" height="21"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -28,6 +29,18 @@
                         <size key="shadowOffset" width="1" height="1"/>
                     </label>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="ZFS-dn-R3j" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="9ze-Sw-xX6"/>
+                    <constraint firstItem="ZFS-dn-R3j" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="KvS-dL-Je9"/>
+                    <constraint firstItem="tSb-O2-ahg" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="bXg-G9-URW"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="ZFS-dn-R3j" secondAttribute="bottom" constant="-8.5" id="cCB-fG-W6b"/>
+                    <constraint firstItem="tSb-O2-ahg" firstAttribute="centerX" secondItem="Ca0-yF-c2n" secondAttribute="centerX" id="gCd-QF-azM"/>
+                    <constraint firstItem="ZFS-dn-R3j" firstAttribute="centerY" secondItem="tSb-O2-ahg" secondAttribute="centerY" id="hCZ-j0-0KH"/>
+                    <constraint firstItem="Ca0-yF-c2n" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-5" id="mgg-ze-ZqC"/>
+                    <constraint firstItem="tSb-O2-ahg" firstAttribute="centerX" secondItem="ZFS-dn-R3j" secondAttribute="centerX" id="rgb-nE-OJk"/>
+                    <constraint firstItem="Ca0-yF-c2n" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="vWL-Gg-wYd"/>
+                    <constraint firstItem="tSb-O2-ahg" firstAttribute="top" secondItem="Ca0-yF-c2n" secondAttribute="bottom" constant="59" id="x46-0p-Saa"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="cellActivityIndicator" destination="tSb-O2-ahg" id="xUt-wa-FwW"/>
