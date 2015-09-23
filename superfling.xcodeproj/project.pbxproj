@@ -96,7 +96,7 @@
 				B1ADCC5B1BB2CB0A003A4E68 /* Reachability */,
 				B1ADCC531BB1ED6D003A4E68 /* Assets */,
 				B1ADCC541BB1ED7D003A4E68 /* Core Data */,
-				B1ADCC521BB1ED57003A4E68 /* Interface */,
+				B1ADCC521BB1ED57003A4E68 /* Interface files */,
 				B1ADCC511BB1ED43003A4E68 /* View Controllers */,
 				B1ADCC551BB2B709003A4E68 /* Custom Cells */,
 				B1ADCC281BB1E506003A4E68 /* Supporting Files */,
@@ -139,13 +139,14 @@
 			name = "View Controllers";
 			sourceTree = "<group>";
 		};
-		B1ADCC521BB1ED57003A4E68 /* Interface */ = {
+		B1ADCC521BB1ED57003A4E68 /* Interface files */ = {
 			isa = PBXGroup;
 			children = (
 				B1ADCC351BB1E506003A4E68 /* Main.storyboard */,
 				B1ADCC3A1BB1E506003A4E68 /* LaunchScreen.xib */,
+				B1ADCC581BB2B744003A4E68 /* SuperFlingTableViewCell.xib */,
 			);
-			name = Interface;
+			name = "Interface files";
 			sourceTree = "<group>";
 		};
 		B1ADCC531BB1ED6D003A4E68 /* Assets */ = {
@@ -169,7 +170,6 @@
 			children = (
 				B1ADCC561BB2B744003A4E68 /* SuperFlingTableViewCell.h */,
 				B1ADCC571BB2B744003A4E68 /* SuperFlingTableViewCell.m */,
-				B1ADCC581BB2B744003A4E68 /* SuperFlingTableViewCell.xib */,
 			);
 			name = "Custom Cells";
 			sourceTree = "<group>";
