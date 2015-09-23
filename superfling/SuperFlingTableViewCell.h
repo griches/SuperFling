@@ -10,7 +10,8 @@
 
 @interface SuperFlingTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) IBOutlet UIImageView *cellImage;
+@property (nonatomic) long pathID;
+@property (nonatomic, strong) IBOutlet UIImageView *cellImageView;
 @property (nonatomic, strong) IBOutlet UILabel *cellTitle;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *cellActivityIndicator;
 
