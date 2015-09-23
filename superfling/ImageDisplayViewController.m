@@ -20,6 +20,7 @@
 @property (nonatomic, strong) IBOutlet UITableView *flingTableView;
 @property (nonatomic) Reachability *hostReachability;
 @property (nonatomic, strong) NSString *libraryPath;
+@property (nonatomic, strong) NSURLSession* imageDownloadSession;
 
 @end
 
@@ -76,6 +77,7 @@
     cell.pathID = [self.flings[currentSection][@"ID"] longValue];
     cell.cellTitle.text = self.flings[currentSection][@"Title"];
     cell.cellImageView.image = nil;
+    [cell.cellActivityIndicator startAnimating];
     [self getImageWithID:[self.flings[currentSection][@"ID"] longValue] forCell:cell];
 }
 
@@ -128,8 +130,8 @@
     
     NSString *fullImagePath = [NSString stringWithFormat:@"%@%ld", imagePath, pathID];
     NSURL *url = [NSURL URLWithString:fullImagePath];
-    
-    NSURLSessionDownloadTask *downloadImageTask = [[NSURLSession sharedSession]
+
+    NSURLSessionDownloadTask *downloadImageTask = [self.imageDownloadSession
                                                    downloadTaskWithURL:url
                                                    completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
                                                        
@@ -138,7 +140,9 @@
                                                            
                                                            UIImage *downloadedImage = [UIImage imageWithData:imageData];
                                                            
-                                                           CGSize resizedSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.width / 1.6);
+                                                           float widthHeightRation = downloadedImage.size.width / downloadedImage.size.height;
+                                                           
+                                                           CGSize resizedSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.width / widthHeightRation);
                                                            UIImage *resizedImage = [UIImage imageWithImage:downloadedImage scaledToSize:resizedSize];
                                                            
                                                            // Save the resized file to disk
@@ -156,6 +160,7 @@
                                                                // Is the cell still the original cell or has it been reused?
                                                                if (cell.pathID == pathID) {
                                                                    cell.cellImageView.image = resizedImage;
+                                                                   [cell.cellActivityIndicator stopAnimating];
                                                                }
                                                            });
                                                        } else {
@@ -165,6 +170,7 @@
                                                            // TODO: Substitute a place holder image
                                                        }
                                                    }];
+    downloadImageTask.priority = 1;
     
     [downloadImageTask resume];
 }
@@ -191,6 +197,7 @@
                 // Is the cell still the original cell or has it been reused?
                 if (cell.pathID == pathID) {
                     cell.cellImageView.image = localImage;
+                    [cell.cellActivityIndicator stopAnimating];
                 }
             });
         });
@@ -258,6 +265,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     self.hostReachability = [Reachability reachabilityWithHostName:dataPath];
     [self.hostReachability startNotifier];
+    
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfiguration.HTTPMaximumConnectionsPerHost = 4;
+    sessionConfiguration.timeoutIntervalForResource = 120;
+    sessionConfiguration.timeoutIntervalForRequest = 300;
+    self.imageDownloadSession = [NSURLSession sessionWithConfiguration:sessionConfiguration];
     
     [self checkReachabilityAndDownloadIfRequired];
 }

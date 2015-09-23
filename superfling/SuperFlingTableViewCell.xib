@@ -14,14 +14,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="tSb-O2-ahg">
-                        <rect key="frame" x="141" y="81" width="37" height="37"/>
+                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="tSb-O2-ahg">
+                        <rect key="frame" x="141" y="90" width="37" height="18"/>
                     </activityIndicatorView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZFS-dn-R3j">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZFS-dn-R3j">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ca0-yF-c2n">
-                        <rect key="frame" x="10" y="10" width="300" height="12.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text=" " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ca0-yF-c2n">
+                        <rect key="frame" x="10" y="10" width="300" height="22"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -31,16 +31,17 @@
                 </subviews>
                 <color key="backgroundColor" red="0.1176470588" green="0.13725490200000001" blue="0.1529411765" alpha="1" colorSpace="calibratedRGB"/>
                 <constraints>
-                    <constraint firstItem="ZFS-dn-R3j" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="9ze-Sw-xX6"/>
-                    <constraint firstItem="ZFS-dn-R3j" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="KvS-dL-Je9"/>
-                    <constraint firstItem="tSb-O2-ahg" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="bXg-G9-URW"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="ZFS-dn-R3j" secondAttribute="bottom" constant="-8.5" id="cCB-fG-W6b"/>
-                    <constraint firstItem="tSb-O2-ahg" firstAttribute="centerX" secondItem="Ca0-yF-c2n" secondAttribute="centerX" id="gCd-QF-azM"/>
-                    <constraint firstItem="ZFS-dn-R3j" firstAttribute="centerY" secondItem="tSb-O2-ahg" secondAttribute="centerY" id="hCZ-j0-0KH"/>
-                    <constraint firstItem="Ca0-yF-c2n" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-5" id="mgg-ze-ZqC"/>
-                    <constraint firstItem="tSb-O2-ahg" firstAttribute="centerX" secondItem="ZFS-dn-R3j" secondAttribute="centerX" id="rgb-nE-OJk"/>
-                    <constraint firstItem="Ca0-yF-c2n" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="vWL-Gg-wYd"/>
-                    <constraint firstItem="tSb-O2-ahg" firstAttribute="top" secondItem="Ca0-yF-c2n" secondAttribute="bottom" constant="59" id="x46-0p-Saa"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="ZFS-dn-R3j" secondAttribute="bottom" constant="-8.5" id="0ZA-lj-Z0m"/>
+                    <constraint firstItem="ZFS-dn-R3j" firstAttribute="centerX" secondItem="Ca0-yF-c2n" secondAttribute="centerX" id="CiF-P2-xHL"/>
+                    <constraint firstItem="tSb-O2-ahg" firstAttribute="top" secondItem="Ca0-yF-c2n" secondAttribute="bottom" constant="58" id="Fpt-NW-DY2"/>
+                    <constraint firstItem="ZFS-dn-R3j" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Hi6-Wr-f6J"/>
+                    <constraint firstItem="Ca0-yF-c2n" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-5" id="JX2-tY-F1Y"/>
+                    <constraint firstItem="ZFS-dn-R3j" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="KeG-qk-IVj"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="tSb-O2-ahg" secondAttribute="bottom" constant="83.5" id="aJX-gH-pjy"/>
+                    <constraint firstItem="tSb-O2-ahg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="141" id="eTL-C1-tSg"/>
+                    <constraint firstItem="Ca0-yF-c2n" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="jfu-pU-Z0l"/>
+                    <constraint firstItem="tSb-O2-ahg" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="n0n-Cp-EK8"/>
+                    <constraint firstItem="Ca0-yF-c2n" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="qxc-fY-eeM"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
