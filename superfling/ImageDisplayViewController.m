@@ -16,6 +16,7 @@
 @interface ImageDisplayViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *flings;
+@property (nonatomic, strong) IBOutlet UITableView *flingTableView;
 @property (nonatomic) Reachability *hostReachability;
 
 @end
@@ -65,16 +66,22 @@
                                                    dataTaskWithURL:url
                                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                                                        
-                                                       if (!error) {
-                                                           
-                                                           // Parse and store in to core data
-                                                           NSLog(@"Data: %@", data);
-                                                       } else {
+                                                       if (error) {
                                                            
                                                            NSLog(@"%@", [error localizedDescription]);
                                                            
-                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no!" message:@"Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                                           [alert show];
+                                                           [self showErrorAlert];
+                                                       } else {
+                                                           
+                                                           // Parse and store in to core data
+                                                           // Working with just array first. Will save to CoreData once tableview is working
+                                                           self.flings = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                                           
+                                                           if (error) {
+                                                               NSLog(@"JSON issue. Check JSON validity: %@", [error localizedDescription]);
+                                                               
+                                                               [self showErrorAlert];
+                                                           }
                                                        }
                                                    }];
     
@@ -101,6 +108,12 @@
                                                    }];
     
     [downloadImageTask resume];
+}
+
+#pragma mark - UI methods -
+- (void)showErrorAlert {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no!" message:@"Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
 }
 
 #pragma mark - Boilerplate -
