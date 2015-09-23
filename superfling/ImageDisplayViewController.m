@@ -10,8 +10,8 @@
 #import "SuperFlingTableViewCell.h"
 #import "Reachability.h"
 
-#define imagePath @"challenge.superfling.com/photos/"
-#define dataPath @"challenge.superfling.com"
+#define imagePath @"http://challenge.superfling.com/photos/"
+#define dataPath @"http://challenge.superfling.com"
 
 @interface ImageDisplayViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -68,6 +68,7 @@
                                                        if (!error) {
                                                            
                                                            // Parse and store in to core data
+                                                           NSLog(@"Data: %@", data);
                                                        } else {
                                                            
                                                            NSLog(@"%@", [error localizedDescription]);
