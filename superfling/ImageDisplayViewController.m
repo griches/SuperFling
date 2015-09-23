@@ -20,7 +20,7 @@
 @property (nonatomic, strong) IBOutlet UITableView *flingTableView;
 @property (nonatomic) Reachability *hostReachability;
 @property (nonatomic, strong) NSString *libraryPath;
-@property (nonatomic, strong) NSURLSession* imageDownloadSession;
+@property (nonatomic, strong) NSURLSession *imageDownloadSession;
 
 @end
 
