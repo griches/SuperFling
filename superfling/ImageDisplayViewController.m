@@ -8,12 +8,15 @@
 
 #import "ImageDisplayViewController.h"
 #import "SuperFlingTableViewCell.h"
+#import "Reachability.h"
 
-#define imagePath @"http://www.challenge.superfling.com/photos/"
+#define imagePath @"challenge.superfling.com/photos/"
+#define dataPath @"challenge.superfling.com"
 
 @interface ImageDisplayViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *flings;
+@property (nonatomic) Reachability *hostReachability;
 
 @end
 
@@ -54,6 +57,29 @@
 }
 
 #pragma mark - Download methods -
+- (void)downloadAndParseListOfFlings {
+    
+    NSURL *url = [NSURL URLWithString:dataPath];
+    
+    NSURLSessionDataTask *downloadDataTask = [[NSURLSession sharedSession]
+                                                   dataTaskWithURL:url
+                                                   completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                       
+                                                       if (!error) {
+                                                           
+                                                           // Parse and store in to core data
+                                                       } else {
+                                                           
+                                                           NSLog(@"%@", [error localizedDescription]);
+                                                           
+                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no!" message:@"Something went wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                                           [alert show];
+                                                       }
+                                                   }];
+    
+    [downloadDataTask resume];
+}
+
 - (void)downloadImageWithID:(long)pathID forCell:(UITableViewCell *)cell {
     
     NSString *fullImagePath = [NSString stringWithFormat:@"%@%ld", imagePath, pathID];
@@ -80,6 +106,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    self.hostReachability = [Reachability reachabilityWithHostName:dataPath];
+    
+    // Fetch the list of flings if we have an internet connection, else display a message if no content or show old content
+    NetworkStatus netStatus = [self.hostReachability currentReachabilityStatus];
+    
+    switch (netStatus)
+    {
+        case NotReachable:        {
+            
+            // Do we have cached data?
+
+            break;
+        }
+            
+        case ReachableViaWWAN:
+        case ReachableViaWiFi:        {
+            
+            // If no data then download new data. Assuming the data isn;t changing for the purpose of the demo as I see no timestamps
+
+            break;
+        }
+    }
+    
+
+    
+    [self downloadAndParseListOfFlings];
 }
 
 - (void)didReceiveMemoryWarning {
