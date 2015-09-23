@@ -39,8 +39,22 @@
 //    [self deselectSelectedCell];
 //}
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 10)];
+
+    [headerView setBackgroundColor:[UIColor blackColor]];
+
+    return headerView;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 4;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
     if (self.flings) {
         return [self.flings count];
     }
@@ -48,14 +62,20 @@
     return 0;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(SuperFlingTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    int currentRow = (int)indexPath.row;
+    int currentSection = (int)indexPath.section;
     
-    cell.pathID = [self.flings[currentRow][@"ID"] longValue];
-    cell.cellTitle.text = self.flings[currentRow][@"Title"];
-    [self getImageWithID:[self.flings[currentRow][@"ID"] longValue] forCell:cell];
+    cell.pathID = [self.flings[currentSection][@"ID"] longValue];
+    cell.cellTitle.text = self.flings[currentSection][@"Title"];
+    cell.cellImageView.image = nil;
+    [self getImageWithID:[self.flings[currentSection][@"ID"] longValue] forCell:cell];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
