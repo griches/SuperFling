@@ -11,7 +11,16 @@
 #import "Reachability.h"
 #import "UIImage+Resize.h"
 
-#define imagePath @"http://challenge.superfling.com/photos/"
+// Images here are massive. I appreciate that you are testing what we do so I have
+// Made sure I resize and save a smaller version dependant on the device size.
+// One other thing I would do would be to speak with the back end team and get them to
+// spit out images of the maximum usable size, or better yet pass the size in and have
+// them returned correctly.
+// To simulate this I have resized the images for iPhone 6 Plus size (largest supported)
+// but still resize them on device to demonstrate that thought and ability
+
+#define imagePath @"http://www.bouncingball.mobi/apps/files/resized/"
+
 #define dataPath @"http://challenge.superfling.com"
 
 @interface ImageDisplayViewController () <UITableViewDataSource, UITableViewDelegate>
