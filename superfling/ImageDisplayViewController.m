@@ -10,7 +10,7 @@
 #import "SuperFlingTableViewCell.h"
 #import "Reachability.h"
 #import "UIImage+Resize.h"
-
+#import <malloc/malloc.h>
 // Images here are massive. I appreciate that you are testing what we do so I have
 // Made sure I resize and save a smaller version dependant on the device size.
 // One other thing I would do would be to speak with the back end team and get them to
@@ -123,6 +123,11 @@
                                                                // Parse and store in to core data
                                                                // Working with just array first. Will save to CoreData once tableview is working
                                                                self.flings = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                                               
+                                                               // Array memory size sits around 15KB for 300 entries. This is fine to manage a much larger array.
+                                                               // Scale shoulnd't be a problem
+                                                               //NSLog(@"size of Object: %zd", malloc_size((__bridge const void *)(self.flings)));
+                                                               //NSLog(@"size of Object: %zd", malloc_size((__bridge const void *)(self.flings[0])));
                                                                
                                                                dispatch_async(dispatch_get_main_queue(), ^{
                                                                    
