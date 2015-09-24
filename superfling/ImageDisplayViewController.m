@@ -13,6 +13,21 @@
 #import "UIImage+Resize.h"
 #import <malloc/malloc.h>
 
+// Defines for core data
+#define CoreDataPathID @"pathID"
+#define CoreDataTitle @"title"
+#define CoreDataImageID @"imageID"
+#define CoreDataIndex @"index"
+
+// Defines for JSON
+#define JSONPathID @"ID"
+#define JSONTitle @"Title"
+#define JSONImageID @"imageID"
+
+// Misc defines
+#define cellName @"SuperFlingTableViewCell"
+
+
 // Images at your location are massive. I appreciate that you are testing what we do so I have
 // made sure I resize and save a smaller version dependant on the device size.
 // One other thing I would do would be to speak with the back end team and get them to
@@ -80,18 +95,18 @@
     
     NSManagedObjectContext *currentFling = self.flings[currentSection];
     
-    cell.pathID = [[currentFling valueForKey:@"pathID"] unsignedLongLongValue];
-    cell.cellTitle.text = [currentFling valueForKey:@"title"];
+    cell.pathID = [[currentFling valueForKey:CoreDataPathID] unsignedLongLongValue];
+    cell.cellTitle.text = [currentFling valueForKey:CoreDataTitle];
     cell.cellImageView.image = nil;
     [cell.cellActivityIndicator startAnimating];
     
-    [self getImageWithID:[[currentFling valueForKey:@"pathID"] unsignedLongLongValue] forCell:cell];
+    [self getImageWithID:[[currentFling valueForKey:CoreDataPathID] unsignedLongLongValue] forCell:cell];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    static NSString *cellIdentifier = @"SuperFlingTableViewCell";
+    static NSString *cellIdentifier = cellName;
     SuperFlingTableViewCell *cell = (SuperFlingTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     return cell;
@@ -137,16 +152,13 @@
                                                                    // Get the parsed dictionary
                                                                    NSDictionary *dictionary = flings[i];
                                                                    
-                                                                   int64_t imageID = [dictionary[@"ImageID"] unsignedLongLongValue];
-                                                                   int64_t pathID = [dictionary[@"ID"] unsignedLongLongValue];
-                                                                   int64_t userID = [dictionary[@"UserID"] unsignedLongLongValue];
+                                                                   int64_t imageID = [dictionary[JSONImageID] unsignedLongLongValue];
+                                                                   int64_t pathID = [dictionary[JSONPathID] unsignedLongLongValue];
                                                                    
-                                                                   [newFling setValue:[NSNumber numberWithLong:imageID] forKey:@"imageID"];
-                                                                   [newFling setValue:[NSNumber numberWithLong:pathID] forKey:@"pathID"];
-                                                                   [newFling setValue:[NSNumber numberWithLong:userID] forKey:@"userID"];
-                                                                   [newFling setValue:dictionary[@"UserName"] forKey:@"userName"];
-                                                                   [newFling setValue:dictionary[@"Title"] forKey:@"title"];
-                                                                   [newFling setValue:[NSNumber numberWithUnsignedLongLong:i] forKey:@"index"];
+                                                                   [newFling setValue:[NSNumber numberWithLong:imageID] forKey:CoreDataImageID];
+                                                                   [newFling setValue:[NSNumber numberWithLong:pathID] forKey:CoreDataPathID];
+                                                                   [newFling setValue:dictionary[JSONTitle] forKey:CoreDataTitle];
+                                                                   [newFling setValue:[NSNumber numberWithUnsignedLongLong:i] forKey:CoreDataIndex];
                                                                }
                                                                
                                                                NSError *error = nil;
@@ -172,7 +184,7 @@
 
 - (void)downloadImageWithIDForCell:(NSDictionary *)dictionary {
     
-    unsigned long long pathID = [dictionary[@"pathID"] unsignedLongLongValue];
+    unsigned long long pathID = [dictionary[CoreDataPathID] unsignedLongLongValue];
     SuperFlingTableViewCell *cell = dictionary[@"cell"];
     
     // Is this cell still on screen?
@@ -238,7 +250,7 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Fling" inManagedObjectContext:self.appDelegate.managedObjectContext];
     [fetchRequest setEntity:entity];
     
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:CoreDataIndex ascending:YES];
     [fetchRequest setSortDescriptors:@[sortDescriptor]];
     
     NSError *error = nil;
@@ -289,7 +301,7 @@
         
         // Adding a timer here so only cells that are on screen for a period of time initiate a download.
         // This stops a brisk scroll downloading images that don't need to be fetched yet
-        [self performSelector:@selector(downloadImageWithIDForCell:) withObject:@{@"pathID": [NSNumber numberWithUnsignedLongLong:pathID], @"cell": cell} afterDelay:0.2 inModes:@[NSRunLoopCommonModes]];
+        [self performSelector:@selector(downloadImageWithIDForCell:) withObject:@{CoreDataPathID: [NSNumber numberWithUnsignedLongLong:pathID], @"cell": cell} afterDelay:0.2 inModes:@[NSRunLoopCommonModes]];
     }
 }
 
@@ -367,16 +379,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    uint64_t pathID = 1;
-    NSString *imageName = [NSString stringWithFormat:@"%llu", pathID];
-    NSLog(@"%@", imageName);
-    
     self.appDelegate = [UIApplication sharedApplication].delegate;
     
     self.libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
     // Register the nib for the table view cells
-    [self.flingTableView registerNib:[UINib nibWithNibName:@"SuperFlingTableViewCell" bundle:nil] forCellReuseIdentifier:@"SuperFlingTableViewCell"];
+    [self.flingTableView registerNib:[UINib nibWithNibName:cellName bundle:nil] forCellReuseIdentifier:cellName];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     self.hostReachability = [Reachability reachabilityWithHostName:@"challenge.superfling.com"];
