@@ -343,7 +343,8 @@
                 [self.flingTableView reloadData];
             } else {
              
-                // No connection and no cached data, wait for connection and show spinner.
+                // No connection and no cached data, wait for connection and show spinner or message explaininng you need an internet connect
+                // This was not implemented in this demo
             }
             break;
         }
