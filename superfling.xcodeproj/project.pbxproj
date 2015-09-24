@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		B10338FD1BB2FB2900C91785 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = B10338FC1BB2FB2900C91785 /* UIImage+Resize.m */; };
+		B106B7C21BB45A6B00F48FE6 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B106B7C11BB45A6B00F48FE6 /* Media.xcassets */; };
 		B1ADCC2B1BB1E506003A4E68 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1ADCC2A1BB1E506003A4E68 /* main.m */; };
 		B1ADCC2E1BB1E506003A4E68 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B1ADCC2D1BB1E506003A4E68 /* AppDelegate.m */; };
 		B1ADCC311BB1E506003A4E68 /* superfling.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B1ADCC2F1BB1E506003A4E68 /* superfling.xcdatamodeld */; };
 		B1ADCC341BB1E506003A4E68 /* ImageDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1ADCC331BB1E506003A4E68 /* ImageDisplayViewController.m */; };
 		B1ADCC371BB1E506003A4E68 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B1ADCC351BB1E506003A4E68 /* Main.storyboard */; };
-		B1ADCC391BB1E506003A4E68 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1ADCC381BB1E506003A4E68 /* Images.xcassets */; };
 		B1ADCC3C1BB1E506003A4E68 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1ADCC3A1BB1E506003A4E68 /* LaunchScreen.xib */; };
 		B1ADCC481BB1E506003A4E68 /* superflingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B1ADCC471BB1E506003A4E68 /* superflingTests.m */; };
 		B1ADCC591BB2B744003A4E68 /* SuperFlingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B1ADCC571BB2B744003A4E68 /* SuperFlingTableViewCell.m */; };
@@ -34,6 +34,7 @@
 /* Begin PBXFileReference section */
 		B10338FB1BB2FB2900C91785 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
 		B10338FC1BB2FB2900C91785 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		B106B7C11BB45A6B00F48FE6 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		B1ADCC251BB1E506003A4E68 /* superfling.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = superfling.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1ADCC291BB1E506003A4E68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B1ADCC2A1BB1E506003A4E68 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -43,7 +44,6 @@
 		B1ADCC321BB1E506003A4E68 /* ImageDisplayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageDisplayViewController.h; sourceTree = "<group>"; };
 		B1ADCC331BB1E506003A4E68 /* ImageDisplayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageDisplayViewController.m; sourceTree = "<group>"; };
 		B1ADCC361BB1E506003A4E68 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		B1ADCC381BB1E506003A4E68 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		B1ADCC3B1BB1E506003A4E68 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		B1ADCC411BB1E506003A4E68 /* superflingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = superflingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1ADCC461BB1E506003A4E68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -165,7 +165,7 @@
 		B1ADCC531BB1ED6D003A4E68 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				B1ADCC381BB1E506003A4E68 /* Images.xcassets */,
+				B106B7C11BB45A6B00F48FE6 /* Media.xcassets */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -276,10 +276,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B106B7C21BB45A6B00F48FE6 /* Media.xcassets in Resources */,
 				B1ADCC371BB1E506003A4E68 /* Main.storyboard in Resources */,
 				B1ADCC3C1BB1E506003A4E68 /* LaunchScreen.xib in Resources */,
 				B1ADCC5A1BB2B744003A4E68 /* SuperFlingTableViewCell.xib in Resources */,
-				B1ADCC391BB1E506003A4E68 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
