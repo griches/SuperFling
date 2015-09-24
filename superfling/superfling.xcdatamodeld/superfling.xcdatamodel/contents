@@ -2,12 +2,13 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14F27" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Fling" syncable="YES">
         <attribute name="imageID" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="index" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="pathID" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
         <attribute name="userID" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="userName" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Fling" positionX="-63" positionY="-18" width="128" height="120"/>
+        <element name="Fling" positionX="-63" positionY="-18" width="128" height="133"/>
     </elements>
 </model>

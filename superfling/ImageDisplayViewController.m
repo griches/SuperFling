@@ -9,6 +9,7 @@
 #import "ImageDisplayViewController.h"
 #import "SuperFlingTableViewCell.h"
 #import "Reachability.h"
+#import "AppDelegate.h"
 #import "UIImage+Resize.h"
 #import <malloc/malloc.h>
 // Images here are massive. I appreciate that you are testing what we do so I have
@@ -24,11 +25,12 @@
 
 @interface ImageDisplayViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) NSMutableArray *flings;
+@property (nonatomic, strong) NSArray *flings;
 @property (nonatomic, strong) IBOutlet UITableView *flingTableView;
 @property (nonatomic) Reachability *hostReachability;
 @property (nonatomic, strong) NSString *libraryPath;
 @property (nonatomic, strong) NSURLSession *imageDownloadSession;
+@property (nonatomic, weak) AppDelegate *appDelegate;
 
 @end
 
@@ -82,12 +84,14 @@
     
     int currentSection = (int)indexPath.section;
     
-    cell.pathID = [self.flings[currentSection][@"ID"] longValue];
-    cell.cellTitle.text = self.flings[currentSection][@"Title"];
+    NSManagedObjectContext *currentFling = self.flings[currentSection];
+    
+    cell.pathID = [[currentFling valueForKey:@"pathID"] unsignedLongLongValue];
+    cell.cellTitle.text = [currentFling valueForKey:@"title"];
     cell.cellImageView.image = nil;
     [cell.cellActivityIndicator startAnimating];
     
-    [self getImageWithID:[self.flings[currentSection][@"ID"] longValue] forCell:cell];
+    [self getImageWithID:[[currentFling valueForKey:@"pathID"] unsignedLongLongValue] forCell:cell];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -122,12 +126,44 @@
                                                                
                                                                // Parse and store in to core data
                                                                // Working with just array first. Will save to CoreData once tableview is working
-                                                               self.flings = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                                               NSArray *flings = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                                                                
                                                                // Array memory size sits around 15KB for 300 entries. This is fine to manage a much larger array.
                                                                // Scale shoulnd't be a problem
-                                                               //NSLog(@"size of Object: %zd", malloc_size((__bridge const void *)(self.flings)));
-                                                               //NSLog(@"size of Object: %zd", malloc_size((__bridge const void *)(self.flings[0])));
+                                                               //NSLog(@"size of Object: %zd", malloc_size((__bridge const void *)(flings)));
+                                                               //NSLog(@"size of Object: %zd", malloc_size((__bridge const void *)(flings[0])));
+                                                               
+                                                               // Loop through array and create core data entires
+                                                               NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Fling" inManagedObjectContext:self.appDelegate.managedObjectContext];
+                                                               
+                                                               for (int i = 0; i < flings.count; i++) {
+                                                                   
+                                                                   NSManagedObject *newFling = [[NSManagedObject alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:self.appDelegate.managedObjectContext];
+                                                                   
+                                                                   // Get the parsed dictionary
+                                                                   NSDictionary *dictionary = flings[i];
+                                                                   
+                                                                   int64_t imageID = [dictionary[@"ImageID"] unsignedLongLongValue];
+                                                                   int64_t pathID = [dictionary[@"ID"] unsignedLongLongValue];
+                                                                   int64_t userID = [dictionary[@"UserID"] unsignedLongLongValue];
+                                                                   
+                                                                   [newFling setValue:[NSNumber numberWithLong:imageID] forKey:@"imageID"];
+                                                                   [newFling setValue:[NSNumber numberWithLong:pathID] forKey:@"pathID"];
+                                                                   [newFling setValue:[NSNumber numberWithLong:userID] forKey:@"userID"];
+                                                                   [newFling setValue:dictionary[@"UserName"] forKey:@"userName"];
+                                                                   [newFling setValue:dictionary[@"Title"] forKey:@"title"];
+                                                                   [newFling setValue:[NSNumber numberWithUnsignedLongLong:i] forKey:@"index"];
+                                                               }
+                                                               
+                                                               NSError *error = nil;
+                                                               
+                                                               if (![self.appDelegate.managedObjectContext save:&error]) {
+                                                                   NSLog(@"Unable to save managed object context.");
+                                                                   NSLog(@"%@, %@", error, error.localizedDescription);
+                                                               }
+                                                               
+                                                               // Store the core data values to the array
+                                                               self.flings = [self resultsFromCoreData];
                                                                
                                                                dispatch_async(dispatch_get_main_queue(), ^{
                                                                    
@@ -142,7 +178,7 @@
 
 - (void)downloadImageWithIDForCell:(NSDictionary *)dictionary {
     
-    long pathID = [dictionary[@"pathID"] longValue];
+    unsigned long long pathID = [dictionary[@"pathID"] unsignedLongLongValue];
     SuperFlingTableViewCell *cell = dictionary[@"cell"];
     
     // Is this cell still on screen?
@@ -152,7 +188,7 @@
         return;
     }
 
-    NSString *fullImagePath = [NSString stringWithFormat:@"%@%ld", imagePath, pathID];
+    NSString *fullImagePath = [NSString stringWithFormat:@"%@%llu", imagePath, pathID];
     NSURL *url = [NSURL URLWithString:fullImagePath];
 
     NSURLSessionDownloadTask *downloadImageTask = [self.imageDownloadSession
@@ -171,7 +207,7 @@
                                                            UIImage *resizedImage = [UIImage imageWithImage:downloadedImage scaledToSize:resizedSize];
                                                            
                                                            // Save the resized file to disk
-                                                           NSString *imageName = [NSString stringWithFormat:@"%ld", pathID];
+                                                           NSString *imageName = [NSString stringWithFormat:@"%llu", pathID];
                                                            NSString *pathToImage = [self.libraryPath stringByAppendingPathComponent:imageName];
                                                            
                                                            // Get the resized image data
@@ -200,12 +236,40 @@
     [downloadImageTask resume];
 }
 
-#pragma mark - UI methods -
+#pragma mark - Helper methods -
+- (NSArray *)resultsFromCoreData {
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Fling" inManagedObjectContext:self.appDelegate.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    [fetchRequest setSortDescriptors:@[sortDescriptor]];
+    
+    NSError *error = nil;
+    NSArray *result = [self.appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    
+    if (error) {
+        NSLog(@"Unable to execute fetch request.");
+        NSLog(@"%@, %@", error, error.localizedDescription);
+        
+    } else {
+        
+        if (result.count) {
+
+            return result;
+        }
+    }
+    
+    return nil;
+}
+
 // This method will either pull from the cache or start a download
-- (void)getImageWithID:(long)pathID forCell:(SuperFlingTableViewCell *)cell {
+- (void)getImageWithID:(uint64_t)pathID forCell:(SuperFlingTableViewCell *)cell {
     
     // Does the file exist in the library?
-    NSString *imageName = [NSString stringWithFormat:@"%ld", pathID];
+    NSString *imageName = [NSString stringWithFormat:@"%llu", pathID];
     NSString *pathToImage = [self.libraryPath stringByAppendingPathComponent:imageName];
 
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:pathToImage];
@@ -231,7 +295,7 @@
         
         // Adding a timer here so only cells that are on screen for a period of time initiate a download.
         // This stops a brisk scroll downloading images that don't need to be fetched yet
-        [self performSelector:@selector(downloadImageWithIDForCell:) withObject:@{@"pathID": [NSNumber numberWithLong:pathID], @"cell": cell} afterDelay:0.2 inModes:@[NSRunLoopCommonModes]];
+        [self performSelector:@selector(downloadImageWithIDForCell:) withObject:@{@"pathID": [NSNumber numberWithUnsignedLongLong:pathID], @"cell": cell} afterDelay:0.2 inModes:@[NSRunLoopCommonModes]];
     }
 }
 
@@ -249,7 +313,7 @@
 {
     Reachability *curReach = [note object];
     NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
-    [self downloadAndParseListOfFlings];
+    [self checkReachabilityAndDownloadIfRequired];
 }
 
 - (void)checkReachabilityAndDownloadIfRequired {
@@ -257,20 +321,43 @@
     // Fetch the list of flings if we have an internet connection, else display a message if no content or show old content
     NetworkStatus netStatus = [self.hostReachability currentReachabilityStatus];
     
+    NSArray *cachedData = [self resultsFromCoreData];
+    
     switch (netStatus)
     {
         case NotReachable:        {
             
             // Do we have cached data?
-            
+            if (cachedData) {
+                
+                // Already have data so just reload the table view and remove the notification
+                [self.hostReachability stopNotifier];
+                
+                self.flings = cachedData;
+                [self.flingTableView reloadData];
+            } else {
+             
+                // No connection and no cached data, wait for connection and show spinner.
+            }
             break;
         }
             
         case ReachableViaWWAN:
         case ReachableViaWiFi:        {
             
-            // If no data then download new data. Assuming the data isn;t changing for the purpose of the demo as I see no timestamps
-            [self downloadAndParseListOfFlings];
+            [self.hostReachability stopNotifier];
+            
+            // If no data then download new data. Assuming the data isn't changing for the purpose of the demo as I see no timestamps
+            // Do we have cached data?
+            if (cachedData) {
+                
+                // Existing data, store in array
+                self.flings = cachedData;
+                [self.flingTableView reloadData];
+            } else {
+                
+                [self downloadAndParseListOfFlings];
+            }
             
             break;
         }
@@ -286,13 +373,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    uint64_t pathID = 1;
+    NSString *imageName = [NSString stringWithFormat:@"%llu", pathID];
+    NSLog(@"%@", imageName);
+    
+    self.appDelegate = [UIApplication sharedApplication].delegate;
+    
     self.libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
     // Register the nib for the table view cells
     [self.flingTableView registerNib:[UINib nibWithNibName:@"SuperFlingTableViewCell" bundle:nil] forCellReuseIdentifier:@"SuperFlingTableViewCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-    self.hostReachability = [Reachability reachabilityWithHostName:dataPath];
+    self.hostReachability = [Reachability reachabilityWithHostName:@"challenge.superfling.com"];
     [self.hostReachability startNotifier];
     
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
