@@ -155,8 +155,8 @@
                                                                    int64_t imageID = [dictionary[JSONImageID] unsignedLongLongValue];
                                                                    int64_t pathID = [dictionary[JSONPathID] unsignedLongLongValue];
                                                                    
-                                                                   [newFling setValue:[NSNumber numberWithLong:imageID] forKey:CoreDataImageID];
-                                                                   [newFling setValue:[NSNumber numberWithLong:pathID] forKey:CoreDataPathID];
+                                                                   [newFling setValue:[NSNumber numberWithUnsignedLongLong:imageID] forKey:CoreDataImageID];
+                                                                   [newFling setValue:[NSNumber numberWithUnsignedLongLong:pathID] forKey:CoreDataPathID];
                                                                    [newFling setValue:dictionary[JSONTitle] forKey:CoreDataTitle];
                                                                    [newFling setValue:[NSNumber numberWithUnsignedLongLong:i] forKey:CoreDataIndex];
                                                                }
