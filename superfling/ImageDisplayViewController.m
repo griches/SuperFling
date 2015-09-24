@@ -19,8 +19,7 @@
 // To simulate this I have resized the images for iPhone 6 Plus size (largest supported)
 // but still resize them on device to demonstrate that thought and ability
 
-//#define imagePath @"http://www.bouncingball.mobi/apps/files/resized/"
-#define imagePath @"http://challenge.superfling.com/photos/"
+#define imagePath @"http://www.bouncingball.mobi/apps/files/resized/"
 #define dataPath @"http://challenge.superfling.com"
 
 @interface ImageDisplayViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -87,6 +86,7 @@
     cell.cellTitle.text = self.flings[currentSection][@"Title"];
     cell.cellImageView.image = nil;
     [cell.cellActivityIndicator startAnimating];
+    
     [self getImageWithID:[self.flings[currentSection][@"ID"] longValue] forCell:cell];
 }
 
@@ -135,8 +135,18 @@
     [downloadDataTask resume];
 }
 
-- (void)downloadImageWithID:(long)pathID forCell:(SuperFlingTableViewCell *)cell {
+- (void)downloadImageWithIDForCell:(NSDictionary *)dictionary {
     
+    long pathID = [dictionary[@"pathID"] longValue];
+    SuperFlingTableViewCell *cell = dictionary[@"cell"];
+    
+    // Is this cell still on screen?
+    if (pathID != cell.pathID) {
+
+        // Cell has been scroll off screen, don't download
+        return;
+    }
+
     NSString *fullImagePath = [NSString stringWithFormat:@"%@%ld", imagePath, pathID];
     NSURL *url = [NSURL URLWithString:fullImagePath];
 
@@ -192,7 +202,7 @@
     // Does the file exist in the library?
     NSString *imageName = [NSString stringWithFormat:@"%ld", pathID];
     NSString *pathToImage = [self.libraryPath stringByAppendingPathComponent:imageName];
-    NSLog(@"%@", pathToImage);
+
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:pathToImage];
     
     if (fileExists) {
@@ -213,7 +223,10 @@
             });
         });
     } else {
-        [self downloadImageWithID:pathID forCell:cell];
+        
+        // Adding a timer here so only cells that are on screen for a period of time initiate a download.
+        // This stops a brisk scroll downloading images that don't need to be fetched yet
+        [self performSelector:@selector(downloadImageWithIDForCell:) withObject:@{@"pathID": [NSNumber numberWithLong:pathID], @"cell": cell} afterDelay:0.2 inModes:@[NSRunLoopCommonModes]];
     }
 }
 
