@@ -19,8 +19,8 @@
 // To simulate this I have resized the images for iPhone 6 Plus size (largest supported)
 // but still resize them on device to demonstrate that thought and ability
 
-#define imagePath @"http://www.bouncingball.mobi/apps/files/resized/"
-
+//#define imagePath @"http://www.bouncingball.mobi/apps/files/resized/"
+#define imagePath @"http://challenge.superfling.com/photos/"
 #define dataPath @"http://challenge.superfling.com"
 
 @interface ImageDisplayViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -149,9 +149,10 @@
                                                            
                                                            UIImage *downloadedImage = [UIImage imageWithData:imageData];
                                                            
-                                                           float widthHeightRation = downloadedImage.size.width / downloadedImage.size.height;
+                                                           float heightWidthRatio = downloadedImage.size.height / downloadedImage.size.width;
                                                            
-                                                           CGSize resizedSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.width / widthHeightRation);
+                                                           // Reszing images to 200 height and keeping the aspect ration. Works better this way with panoramic images
+                                                           CGSize resizedSize = CGSizeMake(200 / heightWidthRatio, 200);
                                                            UIImage *resizedImage = [UIImage imageWithImage:downloadedImage scaledToSize:resizedSize];
                                                            
                                                            // Save the resized file to disk
@@ -191,6 +192,7 @@
     // Does the file exist in the library?
     NSString *imageName = [NSString stringWithFormat:@"%ld", pathID];
     NSString *pathToImage = [self.libraryPath stringByAppendingPathComponent:imageName];
+    NSLog(@"%@", pathToImage);
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:pathToImage];
     
     if (fileExists) {
